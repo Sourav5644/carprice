@@ -1,0 +1,14 @@
+
+data_ingestion:
+  test_size: 0.25
+
+mongodb:
+  uri: "mongodb+srv://bhardwajsourav113:jJP5lbCiSdh6bz5W@cluster0.e1byesq.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+  database: "Proj1"
+  collection: "PROJ1-DATA"
+
+target:
+  column: Price
+
+
+
