@@ -207,6 +207,8 @@ marimo/_lsp/
 __marimo__/
 cred.txt
 models/
+reports/experiment_info.json
 data/
+
 
 
