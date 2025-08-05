@@ -14,6 +14,7 @@ appdirs==1.4.4
 asyncssh==2.15.0
 atpublic==5.0
 attrs==23.2.0
+pymongo
 awscli
 backoff==2.2.1
 billiard==4.2.0
