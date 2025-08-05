@@ -208,6 +208,7 @@ __marimo__/
 cred.txt
 models/
 reports/experiment_info.json
+reports/metrics.json
 data/
 
 
