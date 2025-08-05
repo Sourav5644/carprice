@@ -1,0 +1,54 @@
+# updated dvc.yaml
+
+stages:
+  data_ingestion:
+    cmd: python src/components/data_ingestion.py
+    deps:
+    - src/components/data_ingestion.py
+    params:
+    - data_ingestion.test_size
+    outs:
+    - data/raw
+
+  data_preprocessing:
+    cmd: python src/components/data_preprocessing.py
+    deps:
+    - data/raw
+    - src/components/data_preprocessing.py
+    outs:
+    - data/interim
+
+  data_transformation:
+    cmd: python src/components/data_transformation.py
+    deps:
+    - data/interim
+    - src/components/data_transformation.py
+    params:
+    - target.column
+    outs:
+    - data/processed
+  
+
+  model_building:
+    cmd: python src/components/model_building.py
+    deps:
+    - data/processed
+    - src/components/model_building.py
+    outs:
+    - models/model.pkl
+
+  model_evaluation:
+    cmd: python src/components/model_evaluation.py
+    deps:
+    - models/model.pkl
+    - src/components/model_evaluation.py
+    metrics:
+    - reports/metrics.json
+    outs:
+    - reports/experiment_info.json  # Add the model_info.json file as an output
+
+  model_register:
+    cmd: python src/components/model_register.py
+    deps:
+    - reports/experiment_info.json
+    - src/components/model_register.py

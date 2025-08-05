@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Car Price Prediction</title>
+    <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f0f2f5;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1 {
+      margin-top: 30px;
+      color: #2c3e50;
+    }
+
+    form {
+      background: white;
+      padding: 20px 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      width: 500px;
+      margin-top: 20px;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      color: #34495e;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 10px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background-color: #2980b9;
+    }
+
+    .result-box {
+      margin-top: 30px;
+      padding: 20px;
+      border-radius: 12px;
+      background: #e1f7d5;
+      color: #2c3e50;
+      font-size: 20px;
+      font-weight: bold;
+      animation: fadeIn 2s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: scale(0.9);}
+      to {opacity: 1; transform: scale(1);}
+    }
+
+    .car-animation {
+      margin-top: 30px;
+      width: 150px;
+      position: relative;
+      animation: drive 2s linear forwards;
+      display: none;
+    }
+
+    @keyframes drive {
+      0% { right: -200px; opacity: 0; }
+      100% { right: 0; opacity: 1; }
+    }
+
+    .loader {
+      display: none;
+      border: 8px solid #f3f3f3;
+      border-top: 8px solid #3498db;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin-top: 20px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg);}
+      100% { transform: rotate(360deg);}
+    }
+  </style>
+    <script>
+        // Mapping of companies to their car models
+        const carModels = {
+            "TATA": ["Nexon", "Altroz", "Tiago", "Tigor", "Safari", "Punch", "Harrier"],
+            "Hyundai": ["i10", "i20", "Verna", "Creta", "Venue", "Alcazar", "Aura", "Exter"],
+            "Maruti Suzuki": ["Swift", "Ignis", "S-Presso", "Dzire", "Omni", "Celerio", "Alto", "Eeco", "Baleno", "Ertiga", "Brezza", "Ciaz"],
+            "MG": ["Astor", "Hector", "Hector Plus", "Gloster"],
+            "Kia": ["Seltos", "Sonet", "Carens", "Carnival"],
+            "Toyota": ["Etios", "Camry", "Fortuner", "Corolla", "Yaris", "Land Cruiser", "Urban Cruiser", "Innova", "Innova Crysta"],
+            "Mahindra": ["Thar", "Marazzo", "Bolero", "Scorpio", "XUV300", "XUV700", "KUV100"],
+            "Nissan": ["Kicks", "Magnite", "Sunny", "Micra", "X-Trail"],
+            "Volkswagen": ["Vento", "Tiguan", "Polo", "Taigun", "T-Roc"],
+            "Renault": ["Kiger", "Triber", "Kwid"],
+            "Honda": ["City", "Jazz", "Amaze", "CR-V", "Civic", "Accord"],
+        };
+
+        function updateCarNames() {
+            const companySelect = document.getElementById("Company");
+            const carNameSelect = document.getElementById("CarName");
+            const selectedCompany = companySelect.value;
+
+            // Clear current options
+            carNameSelect.innerHTML = '<option value="">-- Select Car Name --</option>';
+
+            if (carModels[selectedCompany]) {
+                carModels[selectedCompany].forEach(car => {
+                    const option = document.createElement("option");
+                    option.value = car;
+                    option.text = car;
+                    carNameSelect.appendChild(option);
+                });
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>CAR PRICE PREDICTION Form</h1>
+    <form method="POST" action="/predict">
+
+        <!-- Company Dropdown -->
+        <label>Company Name:</label>
+        <select name="Company" id="Company" onchange="updateCarNames()" required>
+            <option value="">-- Select Car Company --</option>
+            <option value="MG">MG</option>
+            <option value="Nissan">Nissan</option>
+            <option value="Hyundai">Hyundai</option>
+            <option value="Maruti Suzuki">Maruti Suzuki</option>
+            <option value="Renault">Renault</option>
+            <option value="TATA">TATA</option>
+            <option value="Mahindra">Mahindra</option>
+            <option value="Kia">Kia</option>
+            <option value="Toyota">Toyota</option>
+            <option value="Volkswagen">Volkswagen</option>
+            <option value="Honda">Honda</option>
+        </select><br><br>
+
+        <!-- Car Name Dropdown (Dynamic) -->
+        <label>Car Name:</label>
+        <select name="CarName" id="CarName" required>
+            <option value="">-- Select Car Name --</option>
+        </select><br><br>
+
+        <!-- Fuel Type -->
+        <label for="fuel">Fuel Type:</label>
+        <select name="Fuel Type" required>
+            <option value="">-- Fuel type --</option>
+            <option value="Petrol">Petrol</option>
+            <option value="Diesel">Diesel</option>
+        </select><br><br>
+        
+        <!-- Tyre condition Type -->
+        <label for="Tyre Condition">Tyre Condition:</label>
+        <select name="Tyre Condition" required>
+            <option value="">-- Tyre Condition --</option>
+            <option value="Needs Replacement">Needs Replacement</option>
+            <option value="New">New</option>
+            <option value="New">Used</option>
+
+        </select><br><br>
+
+        <!-- Making year -->
+        <label>Make Year:</label>
+        <input type="number" name="Make Year" required><br><br>
+
+        <!-- Owner Type -->
+        <label for="owner">Owner Type:</label>
+        <select name="Owner Type" required>
+            <option value="">-- Owner type --</option>
+            <option value="First">First</option>
+            <option value="Second">Second</option>
+            <option value="Third">Third</option>
+            <option value="Fourth">Fourth</option>
+        </select><br><br> 
+        
+        <!-- Total KM Run -->
+        <label>Total KM Run:</label>
+        <input type="number" name="Total_KM_Run" required><br><br>
+
+        <!-- Transmission Type -->
+        <label for="transmission">Transmission Type:</label>
+        <select name="Transmission Type" id="transmission" required>
+            <option value="">--Select--</option>
+            <option value="Manual">Manual</option>
+            <option value="Automatic">Automatic</option>
+            <option value="Automatic (Tiptronic)">Automatic (Tiptronic)</option>
+        </select><br><br>
+
+        <!-- Service Record -->
+        <label for="service">Service Record:</label>
+        <select name="Service Record" id="service" required>
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+        </select><br><br>
+
+        <!-- Insurance -->
+        <label for="insurance">Insurance:</label>
+        <select name="Insurance" id="insurance" required>
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+        </select><br><br>
+
+        <!-- Registration Certificate -->
+        <label for="rc">Registration Certificate:</label>
+        <select name="Registration Certificate" id="rc" required>
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+        </select><br><br>
+
+        <!-- Accessories (Multi-select using checkboxes) -->
+        <label for="accessories"><strong>Accessories:</strong></label><br>
+        <input type="checkbox" name="Accessories" value="Music System"> Music System<br>
+        <input type="checkbox" name="Accessories" value="Sunroof"> Sunroof<br>
+        <input type="checkbox" name="Accessories" value="Leather Seats"> Leather Seats<br>
+        <input type="checkbox" name="Accessories" value="Alloy Wheels"> Alloy Wheels<br>
+        <input type="checkbox" name="Accessories" value="GPS"> GPS<br><br>
+
+        <!-- State Name -->
+        <label for="StateName">State Name:</label><br>
+        <select name="StateName" required>
+            <option value="">-- Select State --</option>
+            <option value="Delhi">Delhi</option>
+            <option value="Tamil Nadu">Tamil Nadu</option>
+            <option value="Punjab">Punjab</option>
+            <option value="Jharkhand">Jharkhand</option>
+            <option value="Karnataka">Karnataka</option>
+            <option value="Maharashtra">Maharashtra</option>
+            <option value="Andhra Pradesh">Andhra Pradesh</option>
+            <option value="Kerala">Kerala</option>
+            <option value="Madhya Pradesh">Madhya Pradesh</option>
+            <option value="Telangana">Telangana</option>
+        </select><br><br>
+
+        <button type="submit">Predict</button>
+    </form>
+
+    <!-- Prediction Result -->
+    <h2>{{ result }}</h2>
+</body>
+</html>
