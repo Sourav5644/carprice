@@ -1,4 +1,4 @@
-
+import logging
 import numpy as np
 import pandas as pd
 import pickle
@@ -47,15 +47,25 @@ def train_model(X_train: np.ndarray, y_train: np.ndarray) -> RandomForestRegress
         logging.error('Error during model training: %s', e)
         raise
 
-def save_model(model, file_path: str) -> None:
+import os
+import pickle
+import logging
+
+def save_model(model, file_path: str) -> None: 
     """Save the trained model to a file."""
     try:
+        # Ensure the directory exists
+        os.makedirs(os.path.dirname(file_path), exist_ok=True)
+        
+        # Save the model
         with open(file_path, 'wb') as file:
             pickle.dump(model, file)
+        
         logging.info('Model saved to %s', file_path)
     except Exception as e:
         logging.error('Error occurred while saving the model: %s', e)
         raise
+
 
 def main():
     try:
