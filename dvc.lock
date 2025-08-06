@@ -65,13 +65,13 @@ stages:
       nfiles: 3
     - path: src/components/model_building.py
       hash: md5
-      md5: 6a7027fcce831a7ca5bcc9b15e17c265
-      size: 2587
+      md5: e90042a9f739a37d36e7d08621b44f1d
+      size: 2797
     outs:
     - path: models/model.pkl
       hash: md5
-      md5: 99ed410e159eb79ab625b1aca7741482
-      size: 9844314
+      md5: 6aeeaf8e00611be811b5da9f11a07696
+      size: 9860874
   model_evaluation:
     cmd: python src/components/model_evaluation.py
     deps:
