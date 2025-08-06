@@ -62,7 +62,7 @@ PREDICTION_COUNT = Counter(
 # ----------------------------------------
 def get_latest_model_version(model_name):
     client = mlflow.MlflowClient()
-    versions = client.get_latest_versions(model_name, stages=["Production"])
+    versions = client.get_latest_versions(model_name, stages=["staging"])
     if not versions:
         all_versions = client.search_model_versions(f"name = '{model_name}'")
         if not all_versions:
