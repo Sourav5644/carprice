@@ -1,163 +1,195 @@
-# 🚗 Car Price Prediction App
 
-A complete end-to-end Machine Learning project that predicts the price of a used car based on multiple features. This project is containerized using Docker, tracks data/model using DVC, and exposes a REST API using FLASK for real-time predictions.
+# 🚀 Car Price Prediction - End-to-End ML Project (MLOps + Deployment)
 
----
-
-## 🌟 Features
-
-- Predict car resale price based on features like year, km driven, fuel type, etc.
-- Scalable and reproducible ML workflow using DVC
-- Flask-powered backend for real-time inference
-- Containerized with Docker for easy deployment
-- Cloud-ready configuration (e.g., Render.com deployment support)
-- Modular and production-grade project structure
+Welcome to the **Car Price Prediction** project – a complete **MLOps-based ML pipeline**, built using industry-standard tools and deployed at scale using **AWS services**, **Docker**, and **GitHub Actions**.  
+This repository demonstrates how to build, train, track, and deploy a machine learning model with full CI/CD and cloud integration.
 
 ---
 
-## 🛠️ Tech Stack
+## 🛠️ Tech Stack Used
 
-| Area | Technology |
-|------|------------|
-| Language | Python |
-| Web Framework | FastAPI |
-| ML Libraries | scikit-learn, pandas, numpy |
-| Version Control | Git |
-| Data & Pipeline Versioning | DVC |
-| Containerization | Docker |
-| Deployment | Render (via `render.yaml`) |
-| Configuration | YAML (`params.yaml`) |
-| Package Management | `pip`, `requirements.txt`, `setup.py` |
+| Category              | Tools & Technologies                                      |
+|----------------------|-----------------------------------------------------------|
+| **Database**          | `MongoDB`                                                 |
+| **ML Tracking**       | `MLflow`, `Dagshub`                                       |
+| **Data Versioning**   | `DVC`, `S3` (AWS)                                         |
+| **Model Training**    | `scikit-learn`, `pandas`, `numpy`, `matplotlib`, `seaborn` |
+| **Model Deployment**  | `Flask`, `Docker`, `ECR`, `AWS`                           |
+| **CI/CD Pipeline**    | `GitHub Actions`                                          |
+| **Cloud Infrastructure** | `AWS CLI`, `IAM`, `S3`, `ECR`, `kubectl`, `eksctl`     |
 
 ---
 
 ## 📁 Project Structure
 
 ```
-carproj/
-└── carprice/
-    ├── app.py               # FastAPI app entry point
-    ├── demo.py              # Demo code for testing
-    ├── template.py          # Prediction and preprocessing logic
-    ├── params.yaml          # ML parameters
-    ├── requirements.txt     # Python dependencies
-    ├── Dockerfile           # Docker configuration
-    ├── dvc.yaml             # DVC pipeline definition
-    ├── dvc.lock             # DVC lock file
-    ├── .dvc/                # DVC metadata and cache
-    ├── render.yaml          # Deployment config (e.g., Render.com)
-    ├── setup.py             # Project packaging
-    └── cred.txt             # (Avoid committing secrets!)
+📦 car-price-prediction/
+├── .github/workflows/         # CI/CD configuration
+├── dvc.yaml                   # DVC pipeline configuration
+├── params.yaml                # Hyperparameters for the pipeline
+├── local_s3/                  # Local cache directory for DVC
+├── flask_app/                 # Flask-based ML model API
+│   ├── app.py                 # Main Flask application
+│   ├── templates/             # HTML templates
+│   ├── static/                # CSS/JS files (if any)
+├── src/                       # Core pipeline code
+│   ├── logger.py
+│   ├── data_ingestion.py
+│   ├── data_preprocessing.py
+│   ├── data_transforming.py
+│   ├── model_building.py
+│   ├── model_evaluation.py
+│   └── model_register.py
+├── tests/                     # Test scripts
+├── scripts/                   # Utility/automation scripts
+├── requirements.txt
+├── Dockerfile
+└── README.md
 ```
 
 ---
 
-## 🚀 Getting Started
+## 📊 Problem Statement
 
-### 1. Clone the repository
+Build a machine learning model to predict the **selling price of a car** based on various features like:
+- Year, Fuel Type, Transmission, Kilometers Driven, Owner Type, etc.
+
+---
+
+## 🧪 ML Workflow Overview
+
+1. **Data Ingestion** - Load and clean raw CSV files.
+2. **Data Preprocessing** - Handle missing values, feature transformation.
+3. **Data Transforming** - Generate new features or encode categorical data.
+4. **Model Training** - Train ML model (RandomForest, XGBoost, etc.)
+5. **Model Evaluation** - Evaluate using RMSE, MAE, R².
+6. **Model Registration** - Register best model with MLflow.
+
+---
+
+## 🔁 Reproducible Pipeline using DVC
+
+We’ve used **DVC** to version control data, model, and pipeline stages.
 
 ```bash
-git clone https://github.com/your-username/car-price-prediction.git
-cd carproj/carprice
+dvc init
+dvc repro             # Run entire pipeline
+dvc status            # See changes in pipeline/data
+dvc push              # Push artifacts to remote (S3/local)
 ```
 
-### 2. Install dependencies
+---
+
+## 🧠 MLflow Integration (via Dagshub)
+
+- Each model training run is logged via **MLflow Tracking UI** hosted on **Dagshub**.
+- Easily visualize parameters, metrics, and artifacts.
+- Enables experiment tracking and model comparison.
+
+🔗 [MLflow UI on Dagshub](https://dagshub.com/your-username/your-repo-name.mlflow)
+
+---
+
+## 🐳 Dockerized Flask App
+
+- Lightweight Flask app containerized using Docker
+- Predict prices via browser form UI
+
+### ⚙️ Build and Run Locally
 
 ```bash
+docker build -t capstone-app:latest .
+docker run -p 8888:5000 -e CAPSTONE_TEST=your_dagshub_token capstone-app:latest
+```
+
+---
+
+## 🔄 CI/CD using GitHub Actions
+
+**Workflow Highlights:**
+
+- On each push:
+  - Code is linted and tested.
+  - DVC stages are run if any change is detected.
+  - Model is trained and logged to MLflow.
+  - Docker image is built and pushed to AWS ECR.
+
+✅ Auto model training  
+✅ Auto deployment to cloud  
+✅ Auto versioning and logging
+
+---
+
+## ☁️ AWS Integration
+
+### 🔐 Secrets Stored in GitHub
+
+| Secret Name              | Description                      |
+|--------------------------|----------------------------------|
+| AWS_ACCESS_KEY_ID        | IAM user's access key            |
+| AWS_SECRET_ACCESS_KEY    | IAM user's secret key            |
+| AWS_REGION               | Deployment region (e.g., ap-south-1) |
+| ECR_REPOSITORY           | ECR repository name              |
+| AWS_ACCOUNT_ID           | AWS account ID                   |
+| CAPSTONE_TEST            | Dagshub MLflow auth token        |
+
+### 💾 S3 + ECR
+- **S3**: Used as remote cache for DVC
+- **ECR**: Used to store docker images
+
+---
+
+## 📸 Output Screenshots
+
+- 📍 MLflow Tracking on Dagshub
+- 📍 Flask App UI
+- 📍 GitHub Actions CI Pipeline
+
+---
+
+## ✅ How to Run Locally
+
+```bash
+# Clone repo
+git clone https://github.com/<your-username>/<repo-name>.git
+cd <repo-name>
+
+# Create env and install dependencies
+conda create -n atlas python=3.10
+conda activate atlas
 pip install -r requirements.txt
-```
 
-### 3. Run FastAPI app locally
+# Run DVC pipeline
+dvc repro
 
-```bash
-uvicorn app:app --reload
-```
-
-Open browser at: `http://127.0.0.1:8000/docs` to test the API.
-
----
-
-## 🐳 Run with Docker
-
-```bash
-docker build -t carprice-app .
-docker run -p 8888:5000 carprice-app
-```
-
-Then go to: `http://localhost:8888/docs`
-
----
-
-## 🔁 ML Pipeline using DVC
-
-This project uses DVC to version control data and model artifacts.
-
-- `dvc.yaml` defines the ML pipeline stages (data prep → train → evaluate)
-- `params.yaml` holds the hyperparameters
-- `.dvc/cache/` manages versioned data and models
-
-### Basic DVC commands
-
-```bash
-dvc repro            # Re-run pipeline
-dvc metrics show     # Show model performance
-dvc plots diff       # Compare metrics across versions
+# Run Flask App
+cd flask_app
+python app.py
 ```
 
 ---
 
-## 📊 Model Overview
+## 📦 Future Enhancements
 
-The model predicts car prices based on:
-
-- Car make year
-- Fuel type
-- Ownership history
-- Transmission type
-- Kilometers driven
-
-Preprocessing includes categorical encoding and scaling. The model is trained using scikit-learn regressors (can be extended with hyperparameter tuning and RandomForestRegressor, etc.)
+Use dataset which contains images of cars. Use clustering or similarity models to suggest cars under budget and available nearby.
 
 ---
 
-## ☁️ Deployment
+## 🙌 Author
 
-- Deployment-ready with `Dockerfile` and `render.yaml` for Render.com or other platforms.
-- To deploy, connect GitHub repo with Render and use `render.yaml` config.
-
----
-
-## ✅ Future Improvements
-
-- Add frontend UI (e.g., React or simple HTML form)
-- Extend to support other prediction targets (e.g., mileage prediction)
-- Integrate MLflow or Weights & Biases for experiment tracking
-- Use MongoDB or PostgreSQL to store predictions
+👤 **Sourav Bhardwaj**  
+📬 [Contact on LinkedIn](https://www.linkedin.com/in/sourav-bhardwaj-88b9b7212/)  
+📧 Email: bhardwajsourav113@gmail.com
 
 ---
 
-## 📄 License
+## ⭐ Final Note
 
-This project is open-source and available under the [MIT License](LICENSE).
+This project is a complete demonstration of **production-grade machine learning engineering** using cutting-edge MLOps tools.  
+**Interviewers** can explore:
+- Real-world CI/CD practices
+- Automated deployment pipelines
+- MLflow logging & DVC versioning
+- Docker & AWS Services
 
----
-
-## 🙏 Acknowledgments
-
-Thanks to open-source communities and FastAPI, scikit-learn, DVC, and Docker contributors.
-
----
-
-## 👨‍💻 Author
-
-**Sourav Bhardwaj**  
-Passionate ML Developer | AWS, Docker, FastAPI Enthusiast  
-[LinkedIn](https://www.linkedin.com/in/sourav-bhardwaj-88b9b7212/) • [GitHub](https://github.com/Sourav5644)
-
----
-
-## 📬 Contact
-Gmial:bhardwajsourav113@gmial.com
-
-For queries or feedback, feel free to reach out!
-
+> ✅ If you're looking for a candidate who understands **both ML and deployment lifecycle**, you're in the right place.
