@@ -10,33 +10,29 @@ class TestFlaskApp(unittest.TestCase):
     def test_home_page(self):
         response = self.client.get('/')
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b'<title>Car Price Predictor</title>', response.data)
+        self.assertIn(b'<title>Car Price Prediction</title>', response.data)
 
     def test_prediction_route(self):
-        sample_input = {
-            'Company Name': 'Hyundai',
-            'Car Name': 'i20',
+        # Using values that match your HTML form (e.g., "1" and "0" for booleans)
+        form_data = {
+            'Company': 'TATA',
+            'CarName': 'Nexon',
             'Fuel Type': 'Petrol',
-            'Make Year': '2019',
+            'Tyre Condition': 'New',
+            'Make Year': '2020',
             'Owner Type': 'First',
-            'Total_KM_Run': '35000',
+            'Total_KM_Run': '10000',
             'Transmission Type': 'Manual',
-            'Service Record': 'Yes',
-            'Insurance': 'Comprehensive',
-            'Registration Certificate': 'Original',
-            'Accessories': 'Yes',
-            'State Name': 'Delhi',
-            'Tyre Condition': 'New'
+            'Service Record': '1',
+            'Insurance': '1',
+            'Registration Certificate': '1',
+            'Accessories': 'Music System',
+            'StateName': 'Delhi'
         }
 
-        response = self.client.post('/predict', data=sample_input)
+        response = self.client.post('/predict', data=form_data)
         self.assertEqual(response.status_code, 200)
-
-        html = response.data.decode("utf-8")
-        self.assertTrue(
-            'Predicted Price' in html or '₹' in html,
-            "Response should contain 'Predicted Price' or currency symbol"
-        )
+        self.assertIn(b'Prediction Result', response.data)
 
 if __name__ == '__main__':
     unittest.main()
