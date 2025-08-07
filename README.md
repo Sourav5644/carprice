@@ -141,9 +141,14 @@ docker run -p 8888:5000 -e CAPSTONE_TEST=your_dagshub_token capstone-app:latest
 
 ## 📸 Output Screenshots
 
-- 📍 MLflow Tracking on Dagshub
-- 📍 Flask App UI
-- 📍 GitHub Actions CI Pipeline
+- 📍 Flask App UI: - [📄 Page 1 Output](./output/pg1.pdf)
+                    - [📄 Page 2 Output](./output/pg2.pdf)
+                    - [📄 Page 3 Output](./output/pg3.pdf)
+        
+- 📍 GitHub Actions CI Pipeline:   - [📄 Page 1 Output](./output/cicd1.png)
+                                    - [📄 Page 2 Output](./output/cicd2.png)
+                                    - [📄 Page 3 Output](./output/cicd3.png)
+        
 
 ---
 
