@@ -1,20 +1,23 @@
-# # Use an official Pyhton 3.10 image from docker hub
-# FROM python:3.10-slim-buster
+FROM python:3.10-slim
 
-# #Set the working directory
-# WORKDIR /app
+WORKDIR /app
 
-# # copy application code
-# COPY . /app
+# Copy app code
+COPY flask_app/ /app/
 
-# #Install the dependencies
-# RUN pip install -r requirements.txt
+# Create the 'processed' directory in the container
+RUN mkdir -p /app/processed
 
-# # Expose the port FastApi will run on
-# EXPOSE 5000
+# Copy the preprocessor into the container
+COPY data/processed/preprocessor.pkl /app/data/processed/preprocessor.pkl
 
-# # Command to run the FastApi app
-# CMD ["python3", "app.py"]
-# #CMD["uvicorn","app:app","--host", "0.0.0.0","--port","8080"]
+# Install dependencies
+RUN pip install --no-cache-dir -r requirements.txt
 
+EXPOSE 5000
 
+# Local
+CMD ["python", "app.py"]
+
+# Prod
+# CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--timeout", "120", "app:app"]

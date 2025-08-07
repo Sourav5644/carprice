@@ -7,3 +7,4 @@ nltk==3.9.1
 numpy==2.2.1
 pandas==2.2.3
 prometheus_client
+scikit-learn==1.5.1
