@@ -1,7 +1,7 @@
 
-# 🚀 Car Price Prediction - End-to-End ML Project (MLOps + Deployment)
+# 🚀 DriveWorth ML – End-to-End MLOps Car Valuation System (MLOps + Deployment)
 
-Welcome to the **Car Price Prediction** project – a complete **MLOps-based ML pipeline**, built using industry-standard tools and deployed at scale using **AWS services**, **Docker**, and **GitHub Actions**.  
+Welcome to the **DriveWorth ML – End-to-End MLOps Car Valuation System** project – a complete **MLOps-based ML pipeline**, built using industry-standard tools and deployed at scale using **AWS services**, **Docker**, and **GitHub Actions**.  
 This repository demonstrates how to build, train, track, and deploy a machine learning model with full CI/CD and cloud integration.
 
 ---
